@@ -3,215 +3,259 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spotify Auth Redirect</title>
+    <title>Spotify Auth - Success</title>
     <style>
+        :root {
+            --background-color: #121212;
+            --primary-text-color: #e0e0e0;
+            --secondary-text-color: #b3b3b3;
+            --accent-color: #1DB954; /* Spotify Green */
+            --container-bg-color: #1e1e1e;
+            --button-bg-color: var(--accent-color);
+            --button-text-color: #ffffff;
+            --button-hover-bg-color: #1aa34a;
+            --code-bg-color: #282828;
+            --code-border-color: #404040;
+            --success-color: #4CAF50;
+            --error-color: #F44336;
+            --link-color: #bb86fc; /* A contrasting purple for potential links */
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
         body {
-            font-family: sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            background-color: var(--background-color);
+            color: var(--primary-text-color);
+            margin: 0;
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
-            padding: 20px;
             box-sizing: border-box;
+            line-height: 1.6;
         }
+
         .container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background-color: var(--container-bg-color);
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
             text-align: center;
             max-width: 600px;
-            width: 100%;
+            width: 90%;
         }
+
         h1 {
-            color: #1DB954; /* Spotify Green */
+            color: var(--primary-text-color);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        p {
+            color: var(--secondary-text-color);
             margin-bottom: 20px;
         }
-        p {
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-        .token-display {
-            background-color: #eee;
-            border: 1px solid #ddd;
+
+        .code-display {
+            background-color: var(--code-bg-color);
+            border: 1px solid var(--code-border-color);
+            color: var(--primary-text-color);
             padding: 15px;
-            margin: 20px 0;
-            word-wrap: break-word; /* Ensure long tokens wrap */
-            white-space: pre-wrap; /* Respect whitespace and wrap */
-            font-family: monospace;
+            border-radius: 6px;
+            font-family: 'Courier New', Courier, monospace;
             font-size: 0.9em;
+            word-break: break-all; /* Handles long codes */
+            white-space: pre-wrap; /* Preserves whitespace and wraps */
             text-align: left;
-            max-height: 150px; /* Limit height and add scroll if needed */
-            overflow-y: auto;
+            margin-bottom: 25px;
+            max-height: 200px; /* Limit height and add scroll if needed */
+            overflow-y: auto; /* Add scroll for very long codes */
         }
+
         .copy-button {
-            background-color: #1DB954;
-            color: white;
+            background-color: var(--button-bg-color);
+            color: var(--button-text-color);
             border: none;
             padding: 12px 25px;
+            border-radius: 25px; /* Pill shape */
             font-size: 1em;
-            border-radius: 50px; /* Spotify-like pill shape */
+            font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 10px;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px; /* Space between icon and text */
+            margin-bottom: 30px;
         }
+
         .copy-button:hover {
-            background-color: #1ed760;
+            background-color: var(--button-hover-bg-color);
         }
+
         .copy-button:active {
-            background-color: #1aa34a;
+            transform: scale(0.98);
         }
+
+        .copy-button svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .instructions {
+            background-color: rgba(29, 185, 84, 0.1); /* Subtle Spotify green background */
+            border-left: 4px solid var(--accent-color);
+            padding: 15px 20px;
+            margin-top: 20px;
+            border-radius: 4px;
+            text-align: left;
+            color: var(--primary-text-color);
+            font-weight: bold;
+            font-size: 1.1em; /* Make it stand out */
+            animation: pulse 2s infinite; /* Attention grabbing animation */
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(29, 185, 84, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(29, 185, 84, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(29, 185, 84, 0); }
+        }
+
+        .instructions strong {
+            color: var(--accent-color); /* Highlight the action */
+        }
+
         .status-message {
             margin-top: 15px;
+            font-size: 0.9em;
+            min-height: 1.2em; /* Reserve space to prevent layout shifts */
+        }
+
+        .success {
+            color: var(--success-color);
             font-weight: bold;
-            min-height: 1.2em; /* Reserve space to prevent layout jump */
         }
-        .status-success {
-            color: #1DB954;
-        }
-        .status-error {
-            color: #d9534f; /* Reddish color for errors */
-        }
-        .instructions {
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
+
+        .error {
+            color: var(--error-color);
             font-weight: bold;
-            font-size: 1.1em;
-            color: #555;
         }
-         strong {
-             color: #333;
-         }
+
+        /* Optional: Error state styling */
+        .container.error-state h1 {
+            color: var(--error-color);
+        }
+        .container.error-state .code-display,
+        .container.error-state .copy-button {
+            display: none; /* Hide code/button if error */
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Authorization Received!</h1>
+    <div class="container" id="main-container">
+        <h1>Authentication Almost Complete!</h1>
+        <p>Your Spotify authorization code is below. It should have been automatically copied to your clipboard.</p>
 
-        <div id="token-section" style="display: none;">
-            <p>Your Spotify Access Token has been retrieved:</p>
-            <div id="tokenDisplay" class="token-display"></div>
-            <button id="copyButton" class="copy-button">Copy Token to Clipboard</button>
-            <div id="statusMessage" class="status-message"></div>
-        </div>
+        <pre id="code-display" class="code-display">Loading code...</pre>
 
-        <div id="error-section" style="display: none;">
-            <p class="status-error">Could not retrieve the access token from the URL.</p>
-            <p>Please ensure you arrived here by clicking the authorization link from the Discord bot. You might need to try authorizing again.</p>
-        </div>
+        <button id="copy-button" class="copy-button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            <span id="button-text">Copy Code</span>
+        </button>
+
+        <div id="copy-status" class="status-message"></div>
 
         <div class="instructions">
-            <p>➡️ Now, please paste this token back into the Discord bot where prompted.</p>
-            <p>(It may have been copied to your clipboard automatically)</p>
+            ⚠️ <strong>ACTION REQUIRED:</strong> Paste this code back into the Discord bot to finish the process!
         </div>
     </div>
 
     <script>
-        const tokenDisplay = document.getElementById('tokenDisplay');
-        const copyButton = document.getElementById('copyButton');
-        const statusMessage = document.getElementById('statusMessage');
-        const tokenSection = document.getElementById('token-section');
-        const errorSection = document.getElementById('error-section');
+        document.addEventListener('DOMContentLoaded', () => {
+            const codeDisplay = document.getElementById('code-display');
+            const copyButton = document.getElementById('copy-button');
+            const buttonText = document.getElementById('button-text');
+            const copyStatus = document.getElementById('copy-status');
+            const mainContainer = document.getElementById('main-container');
 
-        let accessToken = null;
+            // Function to display status messages
+            const showStatus = (message, isError = false) => {
+                copyStatus.textContent = message;
+                copyStatus.className = `status-message ${isError ? 'error' : 'success'}`;
+                // Optional: Clear message after a few seconds
+                setTimeout(() => {
+                   if (copyStatus.textContent === message) { // Avoid clearing newer messages
+                     copyStatus.textContent = '';
+                     copyStatus.className = 'status-message';
+                   }
+                }, 4000); // Clears after 4 seconds
+            };
 
-        // Function to parse parameters from the URL fragment
-        function getHashParams() {
-            const hashParams = {};
-            const r = /([^&;=]+)=?([^&;]*)/g; // Regular expression to parse key-value pairs
-            const q = window.location.hash.substring(1); // Get fragment string without the '#'
-            let e;
-            while ( e = r.exec(q)) {
-               hashParams[e[1]] = decodeURIComponent(e[2]);
-            }
-            return hashParams;
-        }
-
-        // Function to copy text to clipboard
-        async function copyToClipboard(text) {
-            if (!navigator.clipboard) {
-                // Fallback for older browsers (less reliable)
-                try {
-                    const textArea = document.createElement("textarea");
-                    textArea.value = text;
-                    textArea.style.position = "fixed"; // Prevent scrolling to bottom of page in MS Edge.
-                    document.body.appendChild(textArea);
-                    textArea.focus();
-                    textArea.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(textArea);
-                    return true; // Indicate success (though execCommand can fail silently)
-                } catch (err) {
-                    console.error('Fallback copy failed:', err);
-                    return false; // Indicate failure
+            // Function to copy text to clipboard
+            const copyToClipboard = async (text) => {
+                if (!navigator.clipboard) {
+                    showStatus('Clipboard copy feature not supported in this browser.', true);
+                    return false;
                 }
-            }
+                 if (!text) {
+                    showStatus('No code found to copy.', true);
+                    return false;
+                }
+                try {
+                    await navigator.clipboard.writeText(text);
+                    showStatus('Code copied to clipboard!', false);
+                    buttonText.textContent = 'Copied!';
+                    setTimeout(() => { buttonText.textContent = 'Copy Code'; }, 2000); // Reset button text
+                    return true;
+                } catch (err) {
+                    console.error('Failed to copy to clipboard:', err);
+                    showStatus('Failed to copy. Please copy manually.', true);
+                    return false;
+                }
+            };
 
-            // Modern async clipboard API
-            try {
-                await navigator.clipboard.writeText(text);
-                return true; // Indicate success
-            } catch (err) {
-                console.error('Async clipboard copy failed:', err);
-                return false; // Indicate failure
-            }
-        }
+            // Get parameters from URL
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get('code');
+            const error = params.get('error');
+            // const state = params.get('state'); // You might use the state later if needed
 
-        // Run this code when the page loads
-        window.onload = () => {
-            const params = getHashParams();
-            accessToken = params.access_token;
+            if (error) {
+                mainContainer.classList.add('error-state');
+                codeDisplay.textContent = `Authentication Error: ${error}`;
+                codeDisplay.style.color = 'var(--error-color)';
+                document.querySelector('h1').textContent = 'Authentication Failed';
+                document.querySelector('p').textContent = 'An error occurred during the Spotify authorization process. Please try again.';
+                document.querySelector('.instructions').style.display = 'none'; // Hide instructions on error
+            } else if (code) {
+                codeDisplay.textContent = code;
 
-            if (accessToken) {
-                tokenSection.style.display = 'block'; // Show the token section
-                tokenDisplay.textContent = accessToken;
-
-                // Try to copy automatically
-                copyToClipboard(accessToken).then(success => {
-                    if (success) {
-                        statusMessage.textContent = 'Token copied to clipboard automatically!';
-                        statusMessage.className = 'status-message status-success';
+                // Attempt auto-copy on load
+                copyToClipboard(code).then(success => {
+                    if (!success) {
+                        showStatus('Failed to auto-copy. Please use the button to copy.', true);
                     } else {
-                        statusMessage.textContent = 'Automatic copy failed. Please use the button.';
-                        statusMessage.className = 'status-message status-error';
+                         // Optional: slightly different message for auto-copy success
+                        showStatus('Code automatically copied to clipboard!', false);
                     }
                 });
 
-            } else {
-                // Show error message if no token found
-                errorSection.style.display = 'block';
-                console.error("Access token not found in URL fragment.");
-            }
-        };
-
-        // Add event listener to the copy button
-        copyButton.addEventListener('click', () => {
-            if (accessToken) {
-                copyToClipboard(accessToken).then(success => {
-                    if (success) {
-                        statusMessage.textContent = 'Token copied successfully!';
-                        statusMessage.className = 'status-message status-success';
-                    } else {
-                        statusMessage.textContent = 'Copy failed. Please try copying manually.';
-                        statusMessage.className = 'status-message status-error';
-                    }
-                     // Briefly change button text
-                     const originalText = copyButton.textContent;
-                     copyButton.textContent = success ? 'Copied!' : 'Failed!';
-                     setTimeout(() => {
-                         copyButton.textContent = originalText;
-                     }, 1500); // Change back after 1.5 seconds
+                // Add click listener to the button
+                copyButton.addEventListener('click', () => {
+                    copyToClipboard(code);
                 });
+
             } else {
-                 statusMessage.textContent = 'No token available to copy.';
-                 statusMessage.className = 'status-message status-error';
+                mainContainer.classList.add('error-state');
+                codeDisplay.textContent = 'No authorization code found in the URL.';
+                codeDisplay.style.color = 'var(--error-color)';
+                 document.querySelector('h1').textContent = 'Code Not Found';
+                document.querySelector('p').textContent = 'Could not find the required authorization code. Please ensure the URL is correct or try the authorization process again.';
+                 document.querySelector('.instructions').style.display = 'none'; // Hide instructions on error
             }
         });
-
     </script>
 </body>
 </html>
