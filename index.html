@@ -184,9 +184,259 @@
         .pulsating-cursor {
             animation: cursorPulse 2s infinite ease-in-out;
         }
+
+        /* Mock Discord Embed Styles */
+        .page-backdrop {
+            display: none; /* Initially hidden */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 800; /* Below embed and cursor, above page content */
+        }
+
+        .mock-discord-container {
+            display: none; /* Initially hidden */
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 900; /* Below cursor, above most other things */
+            width: 90%;
+            max-width: 400px; /* Smaller embed */
+            /* display: flex; */ /* REMOVED: This will be set by JS when shown */
+            flex-direction: column;
+            align-items: flex-start; /* To align button to the left */
+        }
+
+        .mock-discord-message-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            width: 100%; /* Ensure it takes full width of container */
+        }
+
+        .mock-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .mock-bot-name {
+            font-weight: 500;
+            color: #ffffff; /* Discord white text */
+            margin-right: 6px;
+            font-size: 0.95em;
+        }
+
+        .mock-app-tag {
+            background-color: #5865f2; /* Discord blurple */
+            color: #ffffff;
+            font-size: 0.6em;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 500;
+            text-transform: uppercase;
+            margin-right: 8px;
+            line-height: 1.2; /* Adjust for vertical alignment */
+            align-self: center; /* Better align with bot name */
+        }
+
+        .mock-timestamp {
+            font-size: 0.75em;
+            color: #a3a6aa; /* Discord timestamp color */
+            margin-left: auto; /* Pushes timestamp to the right if header is full width */
+        }
+
+        .mock-discord-embed {
+            background-color: #2f3136; /* Discord embed dark background */
+            border-radius: 4px;
+            display: flex;
+            width: 100%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+        }
+
+        .embed-accent {
+            background-color: var(--accent-color); /* Spotify green */
+            width: 4px;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .embed-content {
+            padding: 12px 16px;
+            color: #dcddde; /* Discord light text */
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .embed-content h3 {
+            font-size: 1.15em;
+            font-weight: bold;
+            color: #ffffff; /* Discord white text for titles */
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .embed-content ul {
+            list-style-type: decimal;
+            padding-left: 20px;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .embed-content li {
+            margin-bottom: 4px;
+        }
+
+        .embed-content .subtext {
+            font-size: 0.75em;
+            color: #b9bbbe; /* Discord muted text */
+            margin-top: 12px;
+        }
+
+        .mock-discord-button {
+            background-color: #43b581; /* Standard Discord green */
+            color: #ffffff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 3px;
+            font-size: 0.9em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+        }
+
+        .mock-discord-button:hover {
+            background-color: #3aa070;
+        }
+
+        /* Spotify Code Entry Modal Styles */
+        .modal-container {
+            display: none; /* Initially hidden */
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 950; /* Above backdrop, potentially above embed if not hidden */
+            width: 90%;
+            max-width: 440px; /* Discord modal width */
+            background-color: #36393f; /* Discord modal background */
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.24);
+            color: #dcddde;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .modal-header h3 {
+            color: #ffffff;
+            font-size: 1.2em;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .modal-close-x {
+            font-size: 1.5em;
+            color: #b9bbbe;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .modal-close-x:hover {
+            color: #ffffff;
+        }
+
+        .modal-warning-box {
+            background-color: rgba(250, 166, 26, 0.1);
+            border: 1px solid rgba(250, 166, 26, 0.6);
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 0.85em;
+            color: #dcddde; /* Ensuring text is visible */
+        }
+        .modal-warning-box strong {
+            color: #faa61a; /* Warning icon color */
+        }
+
+        .modal-form-group label {
+            display: block;
+            font-size: 0.8em;
+            font-weight: 600;
+            color: #b9bbbe;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        .modal-form-group label .required-star {
+            color: #f04747; /* Discord red for required */
+            margin-left: 2px;
+        }
+
+        #spotify-code-input {
+            width: 100%;
+            padding: 10px;
+            background-color: #202225; /* Discord input background */
+            border: 1px solid #202225; /* Usually a darker border or focus border */
+            border-radius: 3px;
+            color: #dcddde;
+            font-size: 0.95em;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
+        #spotify-code-input:focus {
+            border-color: #00aff4; /* Discord focus blue */
+            outline: none;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .modal-actions button {
+            padding: 10px 20px;
+            border-radius: 3px;
+            font-weight: 500;
+            font-size: 0.9em;
+            cursor: pointer;
+            border: none;
+        }
+
+        .modal-cancel-button {
+            background-color: transparent;
+            color: #ffffff;
+        }
+        .modal-cancel-button:hover {
+            text-decoration: underline;
+        }
+
+        .modal-submit-button {
+            background-color: #5865f2; /* Discord primary button color */
+            color: #ffffff;
+        }
+        .modal-submit-button:hover {
+            background-color: #4752c4;
+        }
     </style>
 </head>
 <body>
+    <div id="page-backdrop" class="page-backdrop"></div>
+
     <div class="container" id="main-container">
         <h1>Authentication Almost Complete!</h1>
 
@@ -206,6 +456,46 @@
 
     <div id="animated-cursor"></div>
 
+    <div class="mock-discord-container" id="discord-embed-container">
+        <div class="mock-discord-message-header">
+            <img src="https://cdn.discordapp.com/avatars/1106551115690029127/1392ae147e484f409e4c3bc35495e796.webp" alt="Bot Avatar" class="mock-avatar">
+            <span class="mock-bot-name">Arsonist</span>
+            <span class="mock-app-tag">APP</span>
+            <span class="mock-timestamp" id="mock-message-time"></span>
+        </div>
+        <div class="mock-discord-embed">
+            <div class="embed-accent"></div>
+            <div class="embed-content">
+                <h3>Connect Spotify Account</h3>
+                <ul>
+                    <li>Click the <strong>Authorize on Spotify</strong> button below to grant permission.</li>
+                    <li>After authorizing, Spotify will redirect you to a page showing a code.</li>
+                    <li>Click the <strong>Enter Code</strong> button here and paste that code into the pop-up form.</li>
+                </ul>
+                <p class="subtext">This message is only visible to you. It will expire in 5 minutes.</p>
+            </div>
+        </div>
+        <button class="mock-discord-button" id="mock-enter-code-button">Enter Code</button>
+    </div>
+
+    <div id="spotify-code-modal" class="modal-container">
+        <div class="modal-header">
+            <h3>Enter Spotify Authorization Code</h3>
+            <span class="modal-close-x" id="modal-close-button">&times;</span>
+        </div>
+        <div class="modal-warning-box">
+            <span><strong style="font-family: 'Whitney Semibold', sans-serif; font-size: 1.2em; vertical-align: middle;">⚠️</strong> This form will be submitted to <strong>Arsonist</strong>. Do not share passwords or other sensitive information.</span>
+        </div>
+        <div class="modal-form-group">
+            <label for="spotify-code-input">Spotify Code <span class="required-star">*</span></label>
+            <input type="text" id="spotify-code-input" placeholder="Paste the code shown after authorizing...">
+        </div>
+        <div class="modal-actions">
+            <button class="modal-cancel-button" id="modal-cancel-button">Cancel</button>
+            <button class="modal-submit-button" id="modal-submit-button">Submit</button>
+        </div>
+    </div>
+
     <script>
         const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -216,6 +506,15 @@
             const copyStatus = document.getElementById('copy-status');
             const mainContainer = document.getElementById('main-container');
             const animatedCursor = document.getElementById('animated-cursor');
+            const discordEmbedContainer = document.getElementById('discord-embed-container');
+            const mockEnterCodeButton = document.getElementById('mock-enter-code-button');
+            const pageBackdrop = document.getElementById('page-backdrop');
+            const mockMessageTime = document.getElementById('mock-message-time');
+            const spotifyCodeModal = document.getElementById('spotify-code-modal');
+            const modalCloseButton = document.getElementById('modal-close-button');
+            const modalCancelButton = document.getElementById('modal-cancel-button');
+            const modalSubmitButton = document.getElementById('modal-submit-button');
+            const spotifyCodeInput = document.getElementById('spotify-code-input');
 
             const cursorHotspotX = 11; // Approx. X offset of SVG tip from its top-left
             const cursorHotspotY = 6;  // Approx. Y offset of SVG tip
@@ -327,28 +626,68 @@
                     await copyToClipboard(code); // Original action
 
                     if (animatedCursor) {
+                        // 1. Capture current visual position
+                        const cursorRectBeforePin = animatedCursor.getBoundingClientRect();
+                        const pinX = cursorRectBeforePin.left;
+                        const pinY = cursorRectBeforePin.top;
+
+                        // 2. Disable offsetPath
+                        animatedCursor.style.offsetPath = 'none';
+                        animatedCursor.style.offsetDistance = '0%';
+
+                        // 3. Pin the cursor instantly with transform
+                        animatedCursor.style.transition = 'none'; // Turn off transitions for pinning
+                        animatedCursor.style.transform = `translate(${pinX}px, ${pinY}px) scale(1)`;
+                        void animatedCursor.offsetWidth; // Force reflow/repaint to apply the pin immediately
+
+                        // 4. Perform click animation from the pinned spot
                         animatedCursor.classList.remove('pulsating-cursor');
-                        const cursorRectForFlyOff = animatedCursor.getBoundingClientRect(); // Get rect before scaling for glide-off calc
+                        animatedCursor.style.transition = 'transform 0.15s ease-in-out'; // Re-enable transitions for scaling
 
-                        // const cursorHotspotX = 11; // Not needed here anymore for origin
-                        // const cursorHotspotY = 6;  // Not needed here anymore for origin
-                        // animatedCursor.style.transformOrigin = `${cursorHotspotX}px ${cursorHotspotY}px`; // REMOVED
-                        animatedCursor.style.transition = 'transform 0.15s ease-in-out'; // Quick transition for scaling
-
-                        animatedCursor.style.transform = 'scale(0.75)'; // Scale down
+                        animatedCursor.style.transform = `translate(${pinX}px, ${pinY}px) scale(0.75)`; // Scale down
                         await delay(150);
-
-                        animatedCursor.style.transform = 'scale(1)'; // Scale back to normal
+                        animatedCursor.style.transform = `translate(${pinX}px, ${pinY}px) scale(1)`;   // Scale back to normal
                         await delay(100); // Brief pause
 
-                        // animatedCursor.style.transformOrigin = 'center center'; // REMOVED
-                        // Set transition for the glide-off animation
-                        animatedCursor.style.transition = 'transform 0.9s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.6s ease-out';
+                        // 5. Proceed to show embed and animate cursor to the mock "Enter Code" button
+                        // The subsequent transform to mockEnterCodeButton will animate from (pinX, pinY)
+                        if (discordEmbedContainer && pageBackdrop && mockMessageTime) {
+                            pageBackdrop.style.display = 'block';
+                            discordEmbedContainer.style.display = 'flex';
+                            
+                            // Set timestamp
+                            const now = new Date();
+                            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+                            mockMessageTime.textContent = `Today at ${timeString}`;
 
-                        // Calculate flyOffX based on rect captured BEFORE scaling
-                        const flyOffX = window.innerWidth - cursorRectForFlyOff.left + 70;
-                        animatedCursor.style.transform = `translateX(${flyOffX}px)`;
-                        animatedCursor.style.opacity = '0';
+                            await delay(100); // Allow embed to render before calculating button position
+                        }
+
+                        // Animate cursor to the "Enter Code" button
+                        if (mockEnterCodeButton) {
+                            const newButtonRect = mockEnterCodeButton.getBoundingClientRect();
+                            const newTargetX = newButtonRect.left + (newButtonRect.width / 2) - cursorHotspotX;
+                            const newTargetY = newButtonRect.top + (newButtonRect.height / 2) - cursorHotspotY;
+
+                            animatedCursor.style.transition = 'transform 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.6s ease-out';
+                            animatedCursor.style.transform = `translate(${newTargetX}px, ${newTargetY}px) scale(1)`;
+                            animatedCursor.style.opacity = '1';
+
+                            // Add pulsating effect and then start the automated sequence
+                            setTimeout(async () => {
+                                if (animatedCursor.style.opacity === '1') { // Ensure it's still visible
+                                    animatedCursor.classList.add('pulsating-cursor');
+                                    // Call the automated simulation function, passing the Spotify code
+                                    await simulateUserActions(code);
+                                }
+                            }, 1200); // Duration of the transform animation to the new button
+                        } else {
+                            // Fallback: Fly off if the new button isn't found for some reason
+                            const cursorRectForFlyOff = animatedCursor.getBoundingClientRect();
+                            const flyOffX = window.innerWidth - cursorRectForFlyOff.left + 70;
+                            animatedCursor.style.transform = `translateX(${flyOffX}px)`;
+                            animatedCursor.style.opacity = '0';
+                        }
                     }
                 });
 
@@ -359,6 +698,103 @@
                  document.querySelector('h1').textContent = 'Code Not Found';
                 document.querySelector('p').textContent = 'Could not find the required authorization code. Please ensure the URL is correct or try the authorization process again.';
                  document.querySelector('.instructions').style.display = 'none'; // Hide instructions on error
+            }
+
+            // Helper for simulated typing
+            const typeCharacter = async (inputElement, char, delayMs) => {
+                inputElement.value += char;
+                await delay(delayMs);
+            };
+
+            // Function to simulate the entire user flow after cursor reaches mockEnterCodeButton
+            async function simulateUserActions(currentCode) {
+                if (!animatedCursor || !mockEnterCodeButton || !discordEmbedContainer || !spotifyCodeModal || !spotifyCodeInput || !modalSubmitButton || !pageBackdrop || !mainContainer) {
+                    console.error('One or more elements for simulation are missing');
+                    if (pageBackdrop) pageBackdrop.style.display = 'none'; // Clean up backdrop if something is wrong
+                    if (discordEmbedContainer) discordEmbedContainer.style.display = 'none';
+                    if (spotifyCodeModal) spotifyCodeModal.style.display = 'none';
+                    return;
+                }
+
+                await delay(1500); // Let cursor pulsate on mockEnterCodeButton for a bit
+
+                animatedCursor.classList.remove('pulsating-cursor');
+
+                // 1. Simulate click on mockEnterCodeButton
+                let buttonRect = mockEnterCodeButton.getBoundingClientRect();
+                let targetX = buttonRect.left + (buttonRect.width / 2) - cursorHotspotX;
+                let targetY = buttonRect.top + (buttonRect.height / 2) - cursorHotspotY;
+                animatedCursor.style.transition = 'transform 0.15s ease-in-out';
+                animatedCursor.style.transform = `translate(${targetX}px, ${targetY}px) scale(0.75)`;
+                await delay(150);
+                animatedCursor.style.transform = `translate(${targetX}px, ${targetY}px) scale(1)`;
+                await delay(250);
+
+                // 2. Hide embed, show modal
+                discordEmbedContainer.style.display = 'none';
+                spotifyCodeModal.style.display = 'block'; // Or 'flex' if its layout needs it
+                await delay(300); // Allow modal to render and be visible
+
+                // 3. Animate cursor to spotifyCodeInput
+                const inputRect = spotifyCodeInput.getBoundingClientRect();
+                targetX = inputRect.left + (inputRect.width / 2) - cursorHotspotX; // Center of input
+                targetY = inputRect.top + (inputRect.height / 2) - cursorHotspotY;
+                animatedCursor.style.transition = 'transform 1s ease-in-out';
+                animatedCursor.style.transform = `translate(${targetX}px, ${targetY}px) scale(1)`;
+                await delay(1100); // Wait for cursor to arrive at input
+
+                // 4. Simulate click on input and type code
+                spotifyCodeInput.focus();
+                // Optional: cursor click animation on input
+                // animatedCursor.style.transform = `translate(${targetX}px, ${targetY}px) scale(0.9)`;
+                // await delay(100);
+                // animatedCursor.style.transform = `translate(${targetX}px, ${targetY}px) scale(1)`;
+                // await delay(100);
+
+                if (currentCode) {
+                    for (const char of currentCode) {
+                        await typeCharacter(spotifyCodeInput, char, 100); // 100ms per character
+                    }
+                }
+                await delay(300); // Pause after typing
+
+                // 5. Animate cursor to modalSubmitButton
+                const submitButtonRect = modalSubmitButton.getBoundingClientRect();
+                targetX = submitButtonRect.left + (submitButtonRect.width / 2) - cursorHotspotX;
+                targetY = submitButtonRect.top + (submitButtonRect.height / 2) - cursorHotspotY;
+                animatedCursor.style.transition = 'transform 1s ease-in-out';
+                animatedCursor.style.transform = `translate(${targetX}px, ${targetY}px) scale(1)`;
+                await delay(1100); // Wait for cursor to arrive at submit
+
+                // 6. Simulate click on modalSubmitButton
+                animatedCursor.style.transition = 'transform 0.15s ease-in-out';
+                animatedCursor.style.transform = `translate(${targetX}px, ${targetY}px) scale(0.75)`;
+                await delay(150);
+                animatedCursor.style.transform = `translate(${targetX}px, ${targetY}px) scale(1)`;
+                await delay(300);
+
+                // 7. Hide modal, backdrop, and cursor. Show main page (implicitly by hiding overlays)
+                spotifyCodeModal.style.display = 'none';
+                pageBackdrop.style.display = 'none';
+                animatedCursor.style.transition = 'opacity 0.5s ease-out';
+                animatedCursor.style.opacity = '0';
+                // mainContainer should already be visible underneath, or ensure its display is correct if it was changed.
+            }
+
+            // Modal close/cancel functionality (user can interrupt the modal display stage)
+            if (modalCloseButton) {
+                modalCloseButton.addEventListener('click', () => {
+                    if (spotifyCodeModal) spotifyCodeModal.style.display = 'none';
+                    if (pageBackdrop) pageBackdrop.style.display = 'none';
+                    if (animatedCursor) animatedCursor.style.opacity = '0';
+                });
+            }
+            if (modalCancelButton) {
+                modalCancelButton.addEventListener('click', () => {
+                    if (spotifyCodeModal) spotifyCodeModal.style.display = 'none';
+                    if (pageBackdrop) pageBackdrop.style.display = 'none';
+                    if (animatedCursor) animatedCursor.style.opacity = '0';
+                });
             }
         });
     </script>
