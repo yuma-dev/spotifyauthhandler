@@ -172,9 +172,24 @@
             transition: offset-distance 0.9s cubic-bezier(0.25, 0.1, 0.25, 1),
                         opacity 0.6s ease-out,
                         transform 0.9s cubic-bezier(0.25, 0.1, 0.25, 1),
-                        filter 0.5s ease-in-out; /* Added for glow */
+                        filter 0.5s ease-in-out; /* For the .pulsating-cursor glow */
         }
 
+        /* Glow for the first button (Copy Code) - Accent Color, using filter: drop-shadow for SVG shape */
+        @keyframes accentGlow {
+            0% {
+                filter: drop-shadow(0 0 2px rgba(29, 185, 84, 0.7)); /* Start a bit more defined */
+            }
+            100% {
+                filter: drop-shadow(0 0 15px rgba(29, 185, 84, 0)); /* Expand and fade out completely */
+            }
+        }
+        .accent-glowing-cursor {
+            /* This animation uses filter: drop-shadow */
+            animation: accentGlow 1.5s infinite ease-out; /* ease-out might feel more emanating */
+        }
+
+        /* Glow for subsequent simulated buttons (pulsating-cursor) - White/Green, using filter */
         @keyframes cursorPulse {
             0% { filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.6)) drop-shadow(0 0 2px rgba(29, 185, 84, 0.3)); }
             70% { filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 6px rgba(29, 185, 84, 0.5)); }
@@ -210,6 +225,7 @@
             /* display: flex; */ /* REMOVED: This will be set by JS when shown */
             flex-direction: column;
             align-items: flex-start; /* To align button to the left */
+            pointer-events: none; /* Disable user interaction for showcase */
         }
 
         .mock-discord-message-header {
@@ -334,6 +350,7 @@
             color: #dcddde;
             padding: 20px;
             box-sizing: border-box;
+            pointer-events: none; /* Disable user interaction for showcase */
         }
 
         .modal-header {
@@ -369,8 +386,8 @@
             font-size: 0.85em;
             color: #dcddde; /* Ensuring text is visible */
         }
-        .modal-warning-box strong {
-            color: #faa61a; /* Warning icon color */
+        .modal-warning-box .warning-icon-span strong {
+            color: #faa61a; /* Warning icon color - now specific to the icon */
         }
 
         .modal-form-group label {
@@ -446,12 +463,6 @@
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
             <span id="button-text">Copy Code</span>
         </button>
-
-        <div id="copy-status" class="status-message"></div>
-
-        <div class="instructions">
-            ⚠️ <strong>ACTION REQUIRED:</strong> Paste this code back into the Discord bot to finish the process!
-        </div>
     </div>
 
     <div id="animated-cursor"></div>
@@ -484,7 +495,7 @@
             <span class="modal-close-x" id="modal-close-button">&times;</span>
         </div>
         <div class="modal-warning-box">
-            <span><strong style="font-family: 'Whitney Semibold', sans-serif; font-size: 1.2em; vertical-align: middle;">⚠️</strong> This form will be submitted to <strong>Arsonist</strong>. Do not share passwords or other sensitive information.</span>
+            <span><span class="warning-icon-span"><strong style="font-family: 'Whitney Semibold', sans-serif; font-size: 1.2em; vertical-align: middle;">⚠️</strong></span> This form will be submitted to <strong>Arsonist</strong>. Do not share passwords or other sensitive information.</span>
         </div>
         <div class="modal-form-group">
             <label for="spotify-code-input">Spotify Code <span class="required-star">*</span></label>
@@ -503,7 +514,6 @@
             const codeDisplay = document.getElementById('code-display');
             const copyButton = document.getElementById('copy-button');
             const buttonText = document.getElementById('button-text');
-            const copyStatus = document.getElementById('copy-status');
             const mainContainer = document.getElementById('main-container');
             const animatedCursor = document.getElementById('animated-cursor');
             const discordEmbedContainer = document.getElementById('discord-embed-container');
@@ -523,38 +533,23 @@
                 animatedCursor.style.transformOrigin = `${cursorHotspotX}px ${cursorHotspotY}px`;
             }
 
-            // Function to display status messages
-            const showStatus = (message, isError = false) => {
-                copyStatus.textContent = message;
-                copyStatus.className = `status-message ${isError ? 'error' : 'success'}`;
-                // Optional: Clear message after a few seconds
-                setTimeout(() => {
-                   if (copyStatus.textContent === message) { // Avoid clearing newer messages
-                     copyStatus.textContent = '';
-                     copyStatus.className = 'status-message';
-                   }
-                }, 4000); // Clears after 4 seconds
-            };
-
             // Function to copy text to clipboard
             const copyToClipboard = async (text) => {
                 if (!navigator.clipboard) {
-                    showStatus('Clipboard copy feature not supported in this browser.', true);
+                    console.warn('Clipboard copy feature not supported in this browser.');
                     return false;
                 }
                  if (!text) {
-                    showStatus('No code found to copy.', true);
+                    console.warn('No code found to copy.');
                     return false;
                 }
                 try {
                     await navigator.clipboard.writeText(text);
-                    showStatus('Code copied to clipboard!', false);
                     buttonText.textContent = 'Copied!';
-                    setTimeout(() => { buttonText.textContent = 'Copy Code'; }, 2000); // Reset button text
+                    setTimeout(() => { buttonText.textContent = 'Copy Code'; }, 2000);
                     return true;
                 } catch (err) {
                     console.error('Failed to copy to clipboard:', err);
-                    showStatus('Failed to copy. Please copy manually.', true);
                     return false;
                 }
             };
@@ -574,16 +569,6 @@
                 document.querySelector('.instructions').style.display = 'none'; // Hide instructions on error
             } else if (code) {
                 codeDisplay.textContent = code;
-
-                // Attempt auto-copy on load
-                copyToClipboard(code).then(success => {
-                    if (!success) {
-                        showStatus('Failed to auto-copy. Please use the button to copy.', true);
-                    } else {
-                         // Optional: slightly different message for auto-copy success
-                        showStatus('Code automatically copied to clipboard!', false);
-                    }
-                });
 
                 // Animate cursor to button (only if animatedCursor element exists and button is available)
                 if (animatedCursor && copyButton) {
@@ -615,7 +600,7 @@
                         // Add pulsating effect after animation to button completes
                         setTimeout(() => {
                             if (animatedCursor.style.opacity === '1') { // Ensure it's still visible
-                                animatedCursor.classList.add('pulsating-cursor');
+                                animatedCursor.classList.add('accent-glowing-cursor'); // Use new green glow
                             }
                         }, 900); // Duration of offset-distance animation
                     }, 300); // 300ms delay for initial layout
@@ -641,7 +626,7 @@
                         void animatedCursor.offsetWidth; // Force reflow/repaint to apply the pin immediately
 
                         // 4. Perform click animation from the pinned spot
-                        animatedCursor.classList.remove('pulsating-cursor');
+                        animatedCursor.classList.remove('accent-glowing-cursor'); // Remove new green glow
                         animatedCursor.style.transition = 'transform 0.15s ease-in-out'; // Re-enable transitions for scaling
 
                         animatedCursor.style.transform = `translate(${pinX}px, ${pinY}px) scale(0.75)`; // Scale down
@@ -700,12 +685,6 @@
                  document.querySelector('.instructions').style.display = 'none'; // Hide instructions on error
             }
 
-            // Helper for simulated typing
-            const typeCharacter = async (inputElement, char, delayMs) => {
-                inputElement.value += char;
-                await delay(delayMs);
-            };
-
             // Function to simulate the entire user flow after cursor reaches mockEnterCodeButton
             async function simulateUserActions(currentCode) {
                 if (!animatedCursor || !mockEnterCodeButton || !discordEmbedContainer || !spotifyCodeModal || !spotifyCodeInput || !modalSubmitButton || !pageBackdrop || !mainContainer) {
@@ -716,7 +695,7 @@
                     return;
                 }
 
-                await delay(1500); // Let cursor pulsate on mockEnterCodeButton for a bit
+                await delay(400); // Reduced hover time on mockEnterCodeButton
 
                 animatedCursor.classList.remove('pulsating-cursor');
 
@@ -752,11 +731,15 @@
                 // await delay(100);
 
                 if (currentCode) {
+                    // Paste code instantly
+                    spotifyCodeInput.value = currentCode;
+                    /*
                     for (const char of currentCode) {
                         await typeCharacter(spotifyCodeInput, char, 100); // 100ms per character
                     }
+                    */
                 }
-                await delay(300); // Pause after typing
+                await delay(300); // Pause after pasting
 
                 // 5. Animate cursor to modalSubmitButton
                 const submitButtonRect = modalSubmitButton.getBoundingClientRect();
